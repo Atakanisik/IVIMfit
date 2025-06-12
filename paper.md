@@ -79,7 +79,7 @@ This approach stabilizes fitting, especially in low-SNR conditions [@Lemke:2009]
 Bayesian inference is implemented using PyMC. The posterior is defined as:
 
 $$
-P(	heta | S) \propto P(S | 	theta) \cdot P(	theta)
+P(	theta | S) \propto P(S | 	theta) \cdot P(	theta)
 $$
 
 Where $	heta = \{D, D^*, f\}$ and prior distributions are user-configurable (e.g., uniform, normal, truncated). IVIMfit supports both Markov Chain Monte Carlo (NUTS) and variational inference.
@@ -90,7 +90,7 @@ A more complex model introduces two pseudo-diffusion compartments:
 
 $$
 S(b) = S_0 \cdot \left[ f_{fast} \cdot e^{-b D^*_{fast}} + f_{slow} \cdot e^{-b D^*_{slow}} + (1 - f_{fast} - f_{slow}) \cdot e^{-b D} 
-ight]
+\right]
 $$
 
 This 5-parameter model ($D$, $f_{fast}$, $f_{slow}$, $D^*_{fast}$, $D^*_{slow}$) offers better physiological fidelity in some tissues but is more sensitive to noise. Multi-start fitting is used to improve robustness.
