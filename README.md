@@ -63,7 +63,7 @@ result = fit_biexp_segmented(bvals, signals)
 
 ###  Triexponential
 
-$$ S(b)/S_0 = f_1 e^{-b D_1^*} + f_2 e^{-b D_2^*} + (1 - f_1 - f_2) e^{-b D} $$
+$$ \frac{S(b)}{S_0} = f_1 e^{-b D_1^*} + f_2 e^{-b D_2^*} + (1 - f_1 - f_2) e^{-b D}$$
 
 ```python
 from ivimfit.triexp import fit_triexp_free
