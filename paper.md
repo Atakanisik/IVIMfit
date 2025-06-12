@@ -28,7 +28,7 @@ Unlike many existing tools that are either tightly coupled with GUI platforms or
 
 # Statement of Need
 
-Intravoxel incoherent motion (IVIM) modeling provides essential insights into tissue microstructure by separating diffusion and perfusion effects in DW-MRI. It has been applied in fields such as oncology, hepatology, nephrology, and neurology [@LeBihan:1988; @Paschoal:2022]. Accurate estimation of IVIM parameters (e.g., $D$, $D^*$, $f$) is difficult due to low SNR and ill-posed nonlinear fitting [@Gurney:2018; @Barbieri:2020].
+Intravoxel incoherent motion (IVIM) modeling provides essential insights into tissue microstructure by separating diffusion and perfusion effects in DW-MRI. It has been applied in fields such as oncology, hepatology, nephrology, and neurology [@LeBihan:1988] ,[@Paschoal:2022]. Accurate estimation of IVIM parameters (e.g., $D$, $D^*$, $f$) is difficult due to low SNR and ill-posed nonlinear fitting [@Gurney:2018], [@Barbieri:2020].
 
 Available software options include GUI-based platforms like MITK Diffusion or Olea Sphere, which offer convenience but lack of flexibility and reproducibility. Python-based libraries like ivim [@Jalnefjord:2018], which support Bayesian MCMC fitting for biexponential models. However, these tools are limited extensibility, and integration capability.
 
@@ -56,7 +56,7 @@ The full IVIM model accounts for both diffusion and pseudo-diffusion:
 
 $$
 S(b) = S_0 \cdot \left[ f \cdot e^{-b D^*} + (1 - f) \cdot e^{-b D} 
-ight]
+\right]
 $$
 
 Where:
@@ -79,7 +79,7 @@ This approach stabilizes fitting, especially in low-SNR conditions [@Lemke:2009]
 Bayesian inference is implemented using PyMC. The posterior is defined as:
 
 $$
-P(	heta | S) \propto P(S | 	heta) \cdot P(	heta)
+P(	heta | S) \propto P(S | 	theta) \cdot P(	theta)
 $$
 
 Where $	heta = \{D, D^*, f\}$ and prior distributions are user-configurable (e.g., uniform, normal, truncated). IVIMfit supports both Markov Chain Monte Carlo (NUTS) and variational inference.
