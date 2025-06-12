@@ -1,0 +1,28 @@
+name: Build JOSS PDF
+
+on:
+  push:
+    paths:
+      - 'paper.md'
+      - 'paper.bib'
+      - 'Comparison of Methods.png'
+      - '.github/workflows/draft-pdf.yml'
+
+jobs:
+  build-paper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build draft PDF
+        uses: openjournals/openjournals-draft-action@master
+        with:
+          journal: joss
+          paper-path: paper.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper.pdf
