@@ -10,13 +10,17 @@ tags:
   - Bayesian modeling
 authors:
   - name: Atakan Işık
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-5433-4442
     corresponding: true
+    affiliation: 1
+  - name: Orhan Erdem Haberal
+    orcid:0000-0003-2788-550X
+    equal-contrib: 1
     affiliation: 1
 affiliations:
  - name: Department of Biomedical Engineering, Başkent University, Türkiye
    index: 1
-date: 12 June 2025
+date: 13 June 2025
 bibliography: paper.bib
 ---
 
