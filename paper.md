@@ -90,7 +90,7 @@ A more complex model introduces two pseudo-diffusion compartments:
 
 S(b)/S₀ = f₁ · exp(–b · D₁*) + f₂ · exp(–b · D₂*) + (1 – f₁ – f₂) · exp(–b · D)
 
-This 5-parameter model offers better physiological fidelity in some tissues but is more sensitive to noise. Multi-start fitting is used to improve robustness. Parameters of this model are $D$, $f_{fast}$, $f_{slow}$, $D^*_{fast}$ and $D^*{slow}$.
+This 5-parameter model offers better physiological fidelity in some tissues but is more sensitive to noise. Multi-start fitting is used to improve robustness. Additional parameters of this model by comparing to Biexponential model are $f_{fast}$, $f_{slow}$, $D^*_{fast}$ and $D^*{slow}$.
 
 # Description and Key Features
 
