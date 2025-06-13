@@ -97,7 +97,7 @@ This 5-parameter model ($D$, $f_{fast}$, $f_{slow}$, $D^*_{fast}$, $D^*_{slow}$)
 
 # Description and Key Features
 
-**IVIMfit** is a modular and extensible Python library that provides a complete backend framework for fitting IVIM models to diffusion-weighted signal decay curves. It is designed for researchers who need scriptable, reproducible, and flexible tools to compare, develop, or deploy IVIM modeling strategies  or experimental protocols. Library aims at fitting method and not include extracting b-values and signal intensities from DWI-MR images. This process has left to users.
+**IVIMfit** is a modular and extensible Python library that provides a complete backend framework for fitting IVIM models to diffusion-weighted signal decay curves. It is designed for researchers who need scriptable, reproducible, and flexible tools to compare, develop, or deploy IVIM modeling strategies . Library aims at fitting methods and not include extracting b-values and signal intensities from DWI-MR images. This process has left to users. This library includes functions that not only implement fitting methods but also provide visual outputs to the user. In this way, the user can follow the reliability of the applied method without the need for additional operations.
 
 ![Comparison of IVIM fitting methods. Each curve represents the modeled decay using different algorithms over the same normalized signal decay.](Comparison%20of%20Methods.png){ width=80% }
 
@@ -125,11 +125,11 @@ Key features include:
   - SciPy-based nonlinear optimization
   - Bayesian posterior estimation via PyMC
   
-
 - **Research-ready**:
   - Minimal dependencies (NumPy, SciPy, matplotlib, PyMC)
   - Jupyter and script integration
   - Well-suited for comparative modeling, validation, and publication workflows
+  - Installable from pip
 
 # Acknowledgements
 
