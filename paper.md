@@ -86,7 +86,7 @@ Where $	heta = \{D, D^*, f\}$ and prior distributions are user-configurable (e.g
 
 ## 5. Triexponential Model
 
-A more complex model introduces two pseudo-diffusion compartments:
+A more complex model introduces two pseudo-diffusion compartments: $D^*_{fast}$
 
 S(b)/S₀ = f₁ · exp(–b · D₁*) + f₂ · exp(–b · D₂*) + (1 – f₁ – f₂) · exp(–b · D)
 
