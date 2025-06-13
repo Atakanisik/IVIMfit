@@ -1,7 +1,7 @@
 
 ---
 title: 'IVIMfit: A Modular Python Library for IVIM Model Fitting and Visualization'
-archive_doi: 10.5281/zenodo.1234567
+archive_doi: 10.5281/zenodo.15656116
 tags:
   - Python
   - medical imaging
