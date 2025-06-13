@@ -116,3 +116,6 @@ This work was inspired by previous IVIM modeling efforts, including:
 - [ivim](https://github.com/DevelopmentalImagingMCRI/ivim) by Jalnefjord et al.  
 - PyMC Bayesian modeling  
 - Research on segmented and triexponential IVIM models in liver and kidney imaging
+
+**Citation**: If you use IVIMfit, please cite it using the following DOI:
+[![DOI](https://zenodo.org/badge/1000868128.svg)](https://doi.org/10.5281/zenodo.15656115)

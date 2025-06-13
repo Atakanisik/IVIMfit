@@ -131,6 +131,9 @@ Key features include:
   - Well-suited for comparative modeling, validation, and publication workflows
   - Installable from pip
 
+**Citation**: If you use IVIMfit, please cite it using the following DOI:  
+[![DOI](https://zenodo.org/badge/1000868128.svg)](https://doi.org/10.5281/zenodo.15656115)
+
 # Acknowledgements
 
 We thank the developers of PyMC and SciPy for enabling robust and flexible scientific computing, and acknowledge the open-source community for building tools upon which IVIMfit is based.
