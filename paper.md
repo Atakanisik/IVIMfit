@@ -96,7 +96,7 @@ This 5-parameter model offers better physiological fidelity in some tissues but 
 
 **IVIMfit** is a modular and extensible Python library that provides a complete backend framework for fitting IVIM models to diffusion-weighted signal decay curves. It is designed for researchers who need scriptable, reproducible, and flexible tools to compare, develop, or deploy IVIM modeling strategies . Library aims at fitting methods and not include extracting b-values and signal intensities from DWI-MR images. This process has left to users. This library includes functions that not only implement fitting methods but also provide visual outputs to the user. In this way, the user can follow the reliability of the applied method without the need for additional operations.
 
-![Comparison of IVIM fitting methods. Each curve represents the modeled decay using different algorithms over the same normalized signal decay.](Comparison%20of%20Methods.png){ width=80% }
+![Comparison of IVIM fitting methods. Each curve represents the modeled decay using different algorithms over the same normalized signal decay.](Comparison%20of%20Methods.png){width=80%}
 
 This figure visually compares the behavior of monoexponential, biexponential, segmented biexponential, Bayesian, and triexponential fitting methods using synthetic decay signals.
 
