@@ -1,0 +1,35 @@
+{
+  "title": "IVIMfit: A Modular Python Library for IVIM Model Fitting and Visualization",
+  "creators": [
+    {
+      "name": "Işık, Atakan",
+      "orcid": "0000-0001-5433-4442",
+      "affiliation": "Department of Biomedical Engineering, Başkent University, Türkiye"
+    },
+    {
+      "name": "Haberal, Orhan Erdem",
+      "orcid": "0000-0003-2788-550X",
+      "affiliation": "Department of Biomedical Engineering, Başkent University, Türkiye"
+    }
+  ],
+  "description": "IVIMfit is an open-source Python library for model-based analysis of intravoxel incoherent motion (IVIM) in diffusion-weighted MRI. It supports monoexponential, biexponential (free and segmented), Bayesian, and triexponential model fitting.",
+  "license": "MIT",
+  "upload_type": "software",
+  "keywords": [
+    "Python",
+    "medical imaging",
+    "IVIM",
+    "diffusion MRI",
+    "bi-exponential",
+    "Bayesian modeling"
+  ],
+  "publication_date": "2025-06-13",
+  "version": "1.0.0",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/atakani/IVIMfit",
+      "scheme": "url"
+    }
+  ]
+}
