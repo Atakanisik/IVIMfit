@@ -14,7 +14,7 @@ authors:
     corresponding: true
     affiliation: 1
   - name: Orhan Erdem Haberal
-    orcid:0000-0003-2788-550X
+    orcid: 0000-0003-2788-550X
     equal-contrib: true
     affiliation: 1
 affiliations:
