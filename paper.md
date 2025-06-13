@@ -90,8 +90,7 @@ A more complex model introduces two pseudo-diffusion compartments:
 
 S(b)/S₀ = f₁ · exp(–b · D₁*) + f₂ · exp(–b · D₂*) + (1 – f₁ – f₂) · exp(–b · D)
 
-This 5-parameter model ($D$, $f_{\mathrm{fast}}$, $f_{\mathrm{slow}}$, $D^{\ast}_{\mathrm{fast}}$, $D^{\ast}_{\mathrm{slow}}$)
- offers better physiological fidelity in some tissues but is more sensitive to noise. Multi-start fitting is used to improve robustness.
+This 5-parameter model ($D$, $f_{\text{fast}}$, $f_{\text{slow}}$, $D^{*}_{\text{fast}}$, $D^{*}_{\text{slow}}$) offers better physiological fidelity in some tissues but is more sensitive to noise. Multi-start fitting is used to improve robustness.
 
 # Description and Key Features
 
