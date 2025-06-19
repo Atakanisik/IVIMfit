@@ -9,11 +9,15 @@
 Install from source:
 
 ```bash
-git clone https://github.com/yourusername/ivimfit_lib.git
-cd ivimfit_lib
+git clone https://github.com/Atakanisik/IVIMfit
+cd IVIMfit
 pip install -e .
 ```
+Install from pip:
 
+```bash
+pip install ivimfit
+```
 **Requirements:**
 
 - numpy  
@@ -32,8 +36,19 @@ pip install -e .
 $$ S(b) = S_0 \cdot e^{-b \cdot ADC} $$
 
 ```python
-from ivimfit.adc import fit_adc
-result = fit_adc(bvals, signals)
+import numpy as np
+import matplotlib.pyplot as plt
+from ivimfit.utils import plot_fit, calculate_r_squared
+from ivimfit.adc import fit_adc, monoexp_model
+
+b = np.array([0, 50, 100, 200, 400, 600, 800])
+s = np.array([800, 654,543,423,328,236,121])
+
+adc = fit_adc(b, s)
+r2 = calculate_r_squared(s / s[0], monoexp_model(b, adc))
+
+fig, ax = plot_fit(b, s, monoexp_model, [adc], model_name=f"ADC Fit (R² = {r2:.4f})")
+plt.show()
 ```
 
 ---
@@ -43,20 +58,47 @@ result = fit_adc(bvals, signals)
 $$ S(b)/S_0 = f \cdot e^{-b D^*} + (1-f) \cdot e^{-b D} $$
 
 ```python
-from ivimfit.biexp import fit_biexp_free
-result = fit_biexp_free(bvals, signals)
+import numpy as np
+import matplotlib.pyplot as plt
+from ivimfit.utils import plot_fit, calculate_r_squared
+from ivimfit.biexp import fit_biexp_free, biexp_model
+
+b = np.array([0, 50, 100, 200, 400, 600, 800])
+s = np.array([800, 654,543,423,328,236,121])
+
+f, D, D_star = fit_biexp_free(b, s)
+r2 = calculate_r_squared(s / s[0], biexp_model(b, f, D, D_star))
+
+fig, ax = plot_fit(b, s, biexp_model, [f, D, D_star], model_name=f"Free Fit (R² = {r2:.4f})")
+plt.show()
 ```
 
 ---
 
 ###  Biexponential (Segmented Fit)
 
-- Estimates $D$ using high-b values  
+- Estimates $D$ using high-b values (b>=200 default) 
 - Then fits $f$, $D^*$ with fixed $D$
 
 ```python
-from ivimfit.segmented import fit_biexp_segmented
-result = fit_biexp_segmented(bvals, signals)
+import numpy as np
+import matplotlib.pyplot as plt
+from ivimfit.utils import plot_fit, calculate_r_squared
+from ivimfit.segmented import fit_biexp_segmented, biexp_fixed_D_model
+
+b = np.array([0, 50, 100, 200, 400, 600, 800])
+s = np.array([800, 654,543,423,328,236,121])
+
+f, D_fixed, D_star = fit_biexp_segmented(b, s)
+r2 = calculate_r_squared(s / s[0], biexp_fixed_D_model(b, f, D_star, D_fixed))
+
+fig, ax = plot_fit(
+    b, s,
+    lambda b_, f_, D_star_,D_fixed: biexp_fixed_D_model(b_, f_, D_star_, D_fixed),
+    [f, D_star,D_fixed],
+    model_name=f"Segmented Fit (R² = {r2:.4f})"
+)
+plt.show()
 ```
 
 ---
@@ -66,8 +108,19 @@ result = fit_biexp_segmented(bvals, signals)
 S(b)/S₀ = f₁ · exp(–b · D₁*) + f₂ · exp(–b · D₂*) + (1 – f₁ – f₂) · exp(–b · D)
 
 ```python
-from ivimfit.triexp import fit_triexp_free
-result = fit_triexp_free(bvals, signals)
+import numpy as np
+import matplotlib.pyplot as plt
+from ivimfit.utils import plot_fit, calculate_r_squared
+from ivimfit.triexp import fit_triexp_free, triexp_model
+
+b = np.array([0, 50, 100, 200, 400, 600, 800])
+s = np.array([800, 654,543,423,328,236,121])
+f1, f2, D, D1_star, D2_star = fit_triexp_free(b, s)
+pred = triexp_model(b, f1, f2, D, D1_star, D2_star)
+r2 = calculate_r_squared(s / s[0], pred)
+
+fig, ax = plot_fit(b, s, triexp_model, [f1, f2, D, D1_star, D2_star], model_name=f"Tri-exponential Fit (R² = {r2:.4f})")
+plt.show()
 ```
 
 ---
@@ -75,27 +128,28 @@ result = fit_triexp_free(bvals, signals)
 ###  Bayesian (MCMC)
 
 ```python
+import numpy as np
+import matplotlib.pyplot as plt
+from ivimfit.utils import plot_fit, calculate_r_squared
 from ivimfit.bayesian import fit_bayesian
-result = fit_bayesian(bvals, signals)
+from ivimfit.biexp import biexp_model
+
+b = np.array([0, 50, 100, 200, 400, 600, 800])
+s = np.array([800, 654,543,423,328,236,121])
+
+if __name__ == "__main__":
+    f, D, D_star = fit_bayesian(b, s, draws=500, chains=2)
+    r2 = calculate_r_squared(s / s[0], biexp_model(b, f, D, D_star))
+
+    fig, ax = plot_fit(b, s, biexp_model, [f, D, D_star], model_name=f"Bayesian Fit (R² = {r2:.4f})")
+    plt.show()
 ```
 
 Returns posterior mean estimates for $f$, $D$, and $D^*$.
 
 ---
 
-##  Visualization
 
-You can visualize any model’s fit using the built-in utility:
-
-```python
-from ivimfit.utils import plot_fit
-plot_fit(bvals, signals, model_func, result["params"], model_name="Biexponential")
-```
-
-- Plots both original signal and fitted curve  
-- Shows $R^2$ and parameters on graph
-
----
 
 ##  License
 
@@ -113,7 +167,7 @@ Pull requests are welcome. Please open an issue to discuss your proposed change 
 
 This work was inspired by previous IVIM modeling efforts, including:
 
-- [ivim](https://github.com/DevelopmentalImagingMCRI/ivim) by Jalnefjord et al.  
+- [ivim](https://github.com/oscarjalnefjord/ivim) by Jalnefjord et al.  
 - PyMC Bayesian modeling  
 - Research on segmented and triexponential IVIM models in liver and kidney imaging
 
