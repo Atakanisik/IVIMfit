@@ -86,7 +86,7 @@ $$
 P(	theta | S) \propto P(S | 	theta) \cdot P(	theta)
 $$
 
-Where $	heta = \{D, D^*, f\}$ and prior distributions are user-configurable (e.g., uniform, normal, truncated). IVIMfit supports both Markov Chain Monte Carlo (NUTS) and variational inference.
+Where $	theta = \{D, D^*, f\}$ and prior distributions are user-configurable (e.g., uniform, normal, truncated). IVIMfit supports both Markov Chain Monte Carlo (NUTS) and variational inference.
 
 ## 5. Triexponential Model
 
