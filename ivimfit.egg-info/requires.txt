@@ -1,0 +1,6 @@
+numpy>=1.21
+scipy>=1.7
+matplotlib>=3.4
+pymc>=5.0
+pytensor>=2.12
+arviz>=0.15.0

@@ -1,7 +1,7 @@
 import numpy as np
 import pymc as pm
 import pytensor.tensor as pt
-
+import arviz as az  # R-hat hesaplaması için eklendi
 
 def ivim_model(b, f, D, D_star):
     """
@@ -9,7 +9,6 @@ def ivim_model(b, f, D, D_star):
     S(b)/S0 = f * exp(-b * D*) + (1 - f) * exp(-b * D)
     """
     return f * pt.exp(-b * D_star) + (1 - f) * pt.exp(-b * D)
-
 
 def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
     """
@@ -25,8 +24,7 @@ def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
 
     return b[mask], s[mask]
 
-
-def fit_bayesian(b_values, signal, omit_b0=False, draws=500, chains=4, progressbar=False):
+def fit_bayesian(b_values, signal, omit_b0=False, draws=500, chains=4, cores=None, progressbar=False):
     """
     Fit IVIM model using Bayesian inference with PyMC.
 
@@ -36,10 +34,11 @@ def fit_bayesian(b_values, signal, omit_b0=False, draws=500, chains=4, progressb
         omit_b0 (bool): exclude b=0 from fitting
         draws (int): number of MCMC samples per chain
         chains (int): number of chains
+        cores (int): number of CPU cores to use (crucial to prevent deadlocks)
         progressbar (bool): show PyMC progress bar
 
     Returns:
-        f_mean, D_mean, D_star_mean
+        f_mean, D_mean, D_star_mean, r_hat_max
     """
     b, s = prepare_signal(b_values, signal, omit_b0=omit_b0)
 
@@ -63,11 +62,27 @@ def fit_bayesian(b_values, signal, omit_b0=False, draws=500, chains=4, progressb
         # Likelihood
         pm.Normal("obs", mu=S_model.flatten(), sigma=sigma, observed=s)
 
-        # Sampling
-        trace = pm.sample(draws=draws, chains=chains, progressbar=progressbar, target_accept=0.9)
+        # Sampling (cores parametresi eklendi)
+        trace = pm.sample(draws=draws, chains=chains, cores=cores, progressbar=progressbar, target_accept=0.9)
 
+    # Posterior ortalamalarının alınması
     f_mean = trace.posterior["f"].mean().item()
     D_mean = trace.posterior["D"].mean().item()
     D_star_mean = trace.posterior["D_star"].mean().item()
 
-    return f_mean, D_mean, D_star_mean
+    # Sadece Quality modunda (chains > 1) R-hat hesaplanır
+    r_hat_max = "N/A"
+    if chains > 1:
+        try:
+            rhat_data = az.rhat(trace)
+            r_hat_max = max(
+                rhat_data["f"].values.item(),
+                rhat_data["D"].values.item(),
+                rhat_data["D_star"].values.item()
+            )
+            r_hat_max = round(r_hat_max, 3)
+        except Exception:
+            # Herhangi bir arviz hatasında kod çökmesin diye
+            pass
+
+    return f_mean, D_mean, D_star_mean, r_hat_max
