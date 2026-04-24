@@ -1,3 +1,5 @@
+import numpy as np
+from scipy.optimize import curve_fit
 def monoexp_intercept_model(b, A, D):
     """
     High-b monoexponential model with intercept:

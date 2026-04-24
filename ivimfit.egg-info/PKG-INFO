@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ivimfit
-Version: 0.1.7.1
+Version: 0.1.7.2
 Summary: A Python library for IVIM diffusion MRI model fitting
 Author-email: Atakan Işık <atakani@baskent.edu.tr>
 License-Expression: MIT
