@@ -1,13 +1,10 @@
-import numpy as np
-from scipy.optimize import curve_fit
-
-
-def monoexp_model(b, D):
+def monoexp_intercept_model(b, A, D):
     """
-    Monoexponential diffusion model:
-    S(b)/S0 = exp(-b * D)
+    High-b monoexponential model with intercept:
+    S(b)/S0 = A * exp(-b * D)  
+    (Buradaki A değeri aslında yaklaşık olarak 1-f'e eşittir)
     """
-    return np.exp(-b * D)
+    return A * np.exp(-b * D)
 
 
 def biexp_fixed_D_model(b, f, D_star, D_fixed):
@@ -19,9 +16,6 @@ def biexp_fixed_D_model(b, f, D_star, D_fixed):
 
 
 def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
-    """
-    Filter signal and b-values by max_b and omit_b0 flags.
-    """
     b = np.array(b_values)
     s = np.array(signal)
 
@@ -33,8 +27,6 @@ def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
     return b[mask], s[mask]
 
 
-# ivimfit/segmented.py içindeki ilgili fonksiyon
-
 def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, bounds=None, bounds_D=None):
     b_all, s_all = prepare_signal(b_values, signal, omit_b0=omit_b0)
 
@@ -43,7 +35,7 @@ def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, b
 
     s_all = s_all / s_all[0]
 
-    # Step 1: D hesabı (Yüksek b-değerleri)
+    # --- Step 1: D hesabı (Yüksek b-değerleri) ---
     high_mask = b_all >= split_b
     b_high = b_all[high_mask]
     s_high = s_all[high_mask]
@@ -51,17 +43,21 @@ def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, b
     if len(b_high) < 2:
         return [np.nan, np.nan, np.nan]
 
-    # Varsayılan D limitleri
-    if bounds_D is None:
-        bounds_D = (0, 0.01)
+    # DİKKAT: Artık modelimiz A ve D alıyor. 
+    # A (yani 1-f) 0.0 ile 1.0 arasında, D ise 0.0 ile 0.01 arasında sınırlandırıldı.
+    if bounds_D is None or len(bounds_D[0]) == 1:
+        bounds_D = ([0.0, 0.0], [1.0, 0.01])
 
     try:
-        popt_d, _ = curve_fit(monoexp_model, b_high, s_high, bounds=bounds_D)
-        D_est = popt_d[0]
+        # Eski monoexp_model yerine YENİ modeli kullanıyoruz
+        popt_d, _ = curve_fit(monoexp_intercept_model, b_high, s_high, bounds=bounds_D)
+        # popt_d[0] A değeridir (bununla işimiz yok), popt_d[1] D değeridir.
+        D_est = popt_d[1] 
     except RuntimeError:
         return [np.nan, np.nan, np.nan]
 
-    # Step 2: f ve D* hesabı (Düşük b-değerleri)
+
+    # --- Step 2: f ve D* hesabı (Düşük b-değerleri) ---
     low_mask = b_all < split_b
     b_low = b_all[low_mask]
     s_low = s_all[low_mask]
