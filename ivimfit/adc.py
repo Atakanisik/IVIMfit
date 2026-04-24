@@ -41,27 +41,24 @@ def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
     return b[mask], s[mask]
 
 
-def fit_adc(b_values, signal, omit_b0=False):
-    """
-    Fit monoexponential ADC model to diffusion signal.
-
-    Parameters:
-        b_values (array-like): b-values (s/mm^2)
-        signal (array-like): signal intensities
-        omit_b0 (bool): whether to exclude b=0 from fitting
-
-    Returns:
-        adc (float): estimated apparent diffusion coefficient (mm^2/s)
-    """
+def fit_adc(b_values, signal, omit_b0=False,p0=None, bounds=None):
     b, s = prepare_signal(b_values, signal, omit_b0=omit_b0)
 
     if len(b) < 2:
         raise ValueError("Not enough b-values after filtering to fit ADC.")
 
-    # Normalize to S0
     s = s / s[0]
 
-    # Fit monoexponential model
-    popt, _ = curve_fit(monoexp_model, b, s, bounds=(0, 0.03))
+    # Eğer dışarıdan bounds gelmediyse varsayılanı kullan
+    if bounds is None:
+        bounds = (0, 0.03)
 
-    return popt[0]
+    try:
+        # Eğer dışarıdan p0 geldiyse p0 ile fit et
+        if p0 is not None:
+            popt, _ = curve_fit(monoexp_model, b, s, p0=p0, bounds=bounds)
+        else:
+            popt, _ = curve_fit(monoexp_model, b, s, bounds=bounds)
+        return popt[0]
+    except RuntimeError:
+        return np.nan

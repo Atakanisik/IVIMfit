@@ -33,31 +33,17 @@ def prepare_signal(b_values, signal, omit_b0=False, max_b=1000):
     return b[mask], s[mask]
 
 
-def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, bounds=None):
-    """
-    Two-step segmented IVIM fitting:
-    1. Estimate D from high b-values (b >= split_b) using nonlinear monoexponential fit
-    2. Fix D, estimate f and D* from low b-values using nonlinear biexponential fit
+# ivimfit/segmented.py içindeki ilgili fonksiyon
 
-    Parameters:
-        b_values (array-like): b-values
-        signal (array-like): signal intensities
-        omit_b0 (bool): whether to exclude b=0
-        split_b (int): threshold to separate low/high b-values
-        p0 (list): optional initial guess for [f, D*]
-        bounds (tuple): optional bounds for f and D*
-
-    Returns:
-        f (float), D (float), D_star (float)
-    """
+def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, bounds=None, bounds_D=None):
     b_all, s_all = prepare_signal(b_values, signal, omit_b0=omit_b0)
 
     if len(b_all) < 4:
         raise ValueError("Not enough data points for segmented IVIM fitting.")
 
-    s_all = s_all / s_all[0]  # normalize to S0
+    s_all = s_all / s_all[0]
 
-    # Step 1: Estimate D using high b-values
+    # Step 1: D hesabı (Yüksek b-değerleri)
     high_mask = b_all >= split_b
     b_high = b_all[high_mask]
     s_high = s_all[high_mask]
@@ -65,13 +51,17 @@ def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, b
     if len(b_high) < 2:
         return [np.nan, np.nan, np.nan]
 
+    # Varsayılan D limitleri
+    if bounds_D is None:
+        bounds_D = (0, 0.01)
+
     try:
-        popt_d, _ = curve_fit(monoexp_model, b_high, s_high, bounds=(0, 0.01))
+        popt_d, _ = curve_fit(monoexp_model, b_high, s_high, bounds=bounds_D)
         D_est = popt_d[0]
     except RuntimeError:
         return [np.nan, np.nan, np.nan]
 
-    # Step 2: Estimate f and D* using low b-values
+    # Step 2: f ve D* hesabı (Düşük b-değerleri)
     low_mask = b_all < split_b
     b_low = b_all[low_mask]
     s_low = s_all[low_mask]
@@ -79,9 +69,9 @@ def fit_biexp_segmented(b_values, signal, omit_b0=False, split_b=200, p0=None, b
     if len(b_low) < 3:
         return [np.nan, D_est, np.nan]
 
+    # Varsayılan f ve D* başlangıç/limitleri
     if p0 is None:
         p0 = [0.1, 0.01]
-
     if bounds is None:
         bounds = ([0, 0.005], [0.3, 0.05])
 
